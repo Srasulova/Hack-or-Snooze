@@ -77,3 +77,75 @@ async function submitNewStory(evt) {
 }
 
 $submitForm.on("submit", submitNewStory);
+
+// Functionality for list of user's own stories
+
+function putUserStoriesOnPage() {
+  console.debug("putUserStoriesOnPage");
+
+  $ownStories.empty();
+
+  if (currentUser.ownStories.length === 0) {
+    $ownStories.append("<h5>No stories added by user yet!</h5>");
+  } else {
+    // loop through all of user's stories and generate HTML for them
+    for (let story of currentUser.ownStories) {
+      let $story = generateStoryMarkup(story);
+      $ownStories.append($story);
+    }
+  }
+
+  $ownStories.show();
+}
+
+// Functionality for favorite stories list and star/ un-star a story
+
+// Put favorite stories on page
+function putFavoritesListOnPage() {
+  console.debug("putFavoritesListOnPage");
+
+  $favoriteStories.empty();
+
+  if (currentUser.favorites.length === 0) {
+    $favoriteStories.append("<h5>No favorite stories added!</h5>");
+  } else {
+    // loop through all of user's favorite stories and generate HTML for them
+    for (let story of currentUser.favorites) {
+      let $story = generateStoryMarkup(story);
+      $favoriteStories.append($story);
+    }
+  }
+
+  $favoriteStories.show();
+}
+
+// Make favorite/non favorite star for story
+function getStarHTML(story, user) {
+  const isFavorite = user.isFavorite(story);
+  const starType = isFavorite ? "fas" : "far";
+
+  return `<span class="star"><i class="${starType}"></i> </span> `;
+}
+
+// Handle favorite/un-favorite a story
+async function toggleStoryFavorite(evt) {
+  console.debug("toggleStoryFavorite");
+
+  const $tgt = $(evt.target);
+  const $closestLi = $tgt.closest("li");
+  const storyId = $closestLi.attr("id");
+  const story = storyList.stories.find((s) => s.storyId === storyId);
+
+  // see if the item is already favorites (checking by presence of star)
+  if ($tgt.hasClass("fas")) {
+    // currently a fav story: remove from user's fav list and change star
+    await currentUser.removeFavorite(story);
+    $tgt.closest("i").toggleClass("fas far");
+  } else {
+    // currently not a fav story: do the opposite
+    await currentUser.addFavorite(story);
+    $tgt.closest("i").toggleClass("fas far");
+  }
+}
+
+$storiesList.on("click", ".star", toggleStoryFavorite);
