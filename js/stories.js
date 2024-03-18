@@ -19,10 +19,13 @@ async function getAndShowStoriesOnStart() {
  * Returns the markup for the story.
  */
 
-function generateStoryMarkup(story) {
+function generateStoryMarkup(story, showDeleteBtn = false) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
+
+  // if a user is logged in, show favorite/non-favorite star
+  const showStar = Boolean(currentUser);
 
   return $(`
       <li id="${story.storyId}">
@@ -30,8 +33,8 @@ function generateStoryMarkup(story) {
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
-        <small class="story-author">by ${story.author}</small>
-        <small class="story-user">posted by ${story.username}</small>
+        <div class="story-author">by ${story.author}</div>
+        <div class="story-user">posted by ${story.username}</div>
       </li>
     `);
 }
@@ -54,13 +57,13 @@ function putStoriesOnPage() {
 
 // Handle submitting new story form
 
-async function addNewStory(evt) {
+async function submitNewStory(evt) {
   evt.preventDefault();
 
   // take all information from form
-  const author = $("#author").val();
-  const title = $("#title").val();
-  const url = $("#url").val();
+  const author = $("#create-author").val();
+  const title = $("#create-title").val();
+  const url = $("#create-url").val();
   const username = currentUser.username;
   const storyData = { title, author, url, username };
 
@@ -70,7 +73,7 @@ async function addNewStory(evt) {
   $allStoriesList.prepend($story);
 
   // hide the form and reset it
-  $addNewStoryForm.slideUp("slow").trigger("reset");
+  $submitForm.slideUp("slow").trigger("reset");
 }
 
-$addNewStoryForm.on("submit", addNewStory);
+$submitForm.on("submit", submitNewStory);

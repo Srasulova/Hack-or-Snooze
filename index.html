@@ -36,8 +36,10 @@
       <div class="navbar-brand">
         <a class="nav-link" href="#" id="nav-all">Hack or Snooze</a>
       </div>
-      <div class="nav-left">
-        <a class="nav-link" href="#" id="submitNewStory">submit</a>
+      <div class="nav-left main-nav-links hidden">
+        <a class="nav-link" href="#" id="nav-submit-story">submit</a>
+        <a class="nav-link" href="#" id="nav-favorites">favorites</a>
+        <a class="nav-link" href="#" id="nav-my-stories">my stories</a>
       </div>
       <div class="nav-right">
         <a class="nav-link" href="#" id="nav-login">login/signup</a>
@@ -47,18 +49,20 @@
     </nav>
 
     <!-- area for stories (all stories, user stories, favorites) -->
-    <section class="stories-container container">
-      <form action="submit" id="newStory" class="newStory hidden">
-        <label for="author">Author</label>
-        <input type="text" id="author" />
+    <section class="stories-container container" id="stories-container">
+      <!-- form for submitting new story -->
+      <form action="" id="submit-form" class="submit-form hidden">
+        <label for="create-author">Author</label>
+        <input type="text" id="create-author" />
 
-        <label for="title">Title</label>
-        <input type="text" id="title" />
+        <label for="create-title">Title</label>
+        <input type="text" id="create-title" />
 
-        <label for="url">Url</label>
-        <input type="text" id="url" />
+        <label for="create-url">Url</label>
+        <input type="text" id="create-url" />
 
         <button type="submit" class="btnSubmit">Submit</button>
+        <hr />
       </form>
 
       <!-- loading message (removed by JS after stories loaded) -->
@@ -66,6 +70,12 @@
 
       <!-- List of all stories -->
       <ol id="all-stories-list" class="stories-list"></ol>
+
+      <!-- List of favorite stories -->
+      <ol id="favorited-stories" class="hidden stories-list"></ol>
+
+      <!-- List of stories by user -->
+      <ol id="my-stories" class="hidden stories-list"></ol>
     </section>
 
     <!-- Login and signup forms -->
@@ -120,6 +130,18 @@
         </div>
         <button type="submit">create account</button>
       </form>
+    </section>
+
+    <!-- User profile -->
+    <section id="user-profile" class="hidden">
+      <div class="user-profile-box container">
+        <h4>User Profile Infor</h4>
+        <section>
+          <div>Name: <span id="profile-name">Name:</span></div>
+          <div>Username: <span id="profile-username">Username:</span></div>
+          <div>Account Created: <span id="profile-account-date"></span></div>
+        </section>
+      </div>
     </section>
 
     <!-- Library JS & our JS -->
