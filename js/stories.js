@@ -157,3 +157,18 @@ async function toggleStoryFavorite(evt) {
 }
 
 $storiesList.on("click", ".star", toggleStoryFavorite);
+
+// Handle deleting a story
+async function deleteStory(evt) {
+  console.debug("deleteStory");
+
+  const $closestLi = $(evt.target).closest("li");
+  const storyId = $closestLi.attr("id");
+
+  await storyList.removeStory(currentUser, storyId);
+
+  // regenerate story list
+  await putUserStoriesOnPage();
+}
+
+$ownStories.on("click", ".trash-can", deleteStory);
