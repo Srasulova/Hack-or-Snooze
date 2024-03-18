@@ -29,12 +29,15 @@ function generateStoryMarkup(story, showDeleteBtn = false) {
 
   return $(`
       <li id="${story.storyId}">
-        <a href="${story.url}" target="a_blank" class="story-link">
-          ${story.title}
-        </a>
-        <small class="story-hostname">(${hostName})</small>
-        <div class="story-author">by ${story.author}</div>
-        <div class="story-user">posted by ${story.username}</div>
+      <div>${showDeleteBtn ? getDeleteBtnHTML() : ""}
+      ${showStar ? getStarHTML(story, currentUser) : ""}
+      <a href="${story.url}" target="a_blank" class="story-link">
+      ${story.title}
+    </a>
+    <small class="story-hostname">(${hostName})</small>
+    <div class="story-author">by ${story.author}</div>
+    <div class="story-user">posted by ${story.username}</div>
+      </div>
       </li>
     `);
 }
@@ -90,7 +93,7 @@ function putUserStoriesOnPage() {
   } else {
     // loop through all of user's stories and generate HTML for them
     for (let story of currentUser.ownStories) {
-      let $story = generateStoryMarkup(story);
+      let $story = generateStoryMarkup(story, true);
       $ownStories.append($story);
     }
   }
@@ -119,12 +122,17 @@ function putFavoritesListOnPage() {
   $favoriteStories.show();
 }
 
+// Make delete buttton HTML for story
+function getDeleteBtnHTML() {
+  return `<span><i class="fas fa-trash-alt"></i></span>`;
+}
+
 // Make favorite/non favorite star for story
 function getStarHTML(story, user) {
   const isFavorite = user.isFavorite(story);
   const starType = isFavorite ? "fas" : "far";
 
-  return `<span class="star"><i class="${starType}"></i> </span> `;
+  return `<span class="star"><i class="${starType} fa-star"></i> </span> `;
 }
 
 // Handle favorite/un-favorite a story
